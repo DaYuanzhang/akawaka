@@ -1,6 +1,7 @@
 package main
 
 import (
+	"akawaka/pkg/utils"
 	"fmt"
 	"os"
 	"path"
@@ -85,6 +86,7 @@ func run(rootPath string) {
 }
 
 func main() {
+	utils.ShowBanner()
 	fmt.Printf("hello world!\n")
 	print(isDir("D:\\Tools\\框架漏洞\\综合扫描器\\afrog\\pocs\\v\\afrog.version"))
 	run("D:\\Tools\\框架漏洞\\综合扫描器\\afrog")
