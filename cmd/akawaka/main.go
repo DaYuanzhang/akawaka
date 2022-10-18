@@ -1,93 +1,82 @@
 package main
 
 import (
+	"akawaka/pkg/config"
+	"akawaka/pkg/runner"
 	"akawaka/pkg/utils"
 	"fmt"
+	"github.com/urfave/cli/v2"
 	"os"
-	"path"
-	"path/filepath"
 	"strings"
 )
 
-var extens = []string{"go"}
-var keywords = []string{"package main"}
-
-func getFileList(rootPath string) []string {
-
-	var files []string
-	err := filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
-		files = append(files, path)
-		return nil
-	})
-	if err != nil {
-		panic(err)
-	}
-	for _, file := range files {
-		fmt.Println(file)
-	}
-	return files
-}
-
-func isDir(filepath string) bool {
-	s, err := os.Stat(filepath)
-	if err != nil {
-		return false
-	}
-	return s.IsDir()
-}
-
-func inExtens(fileName string) bool {
-	fileSuffix := path.Ext(fileName)
-	for _, e := range extens {
-		if fileSuffix == "."+e {
-			return true
-		}
-	}
-	return false
-}
-
-func readFile(fileName string) (string, error) {
-	b, err := os.ReadFile(fileName)
-	if err != nil {
-		fmt.Printf("err: %v\n", err)
-		return "", err
-	} else {
-		content := string(b[:])
-		//fmt.Printf("b: %v\n", content)
-		return content, nil
-	}
-}
-
-func search(filePath string) {
-	content, err := readFile(filePath)
-	if err != nil {
-		fmt.Printf("err: %v\n", err)
-		return
-	}
-	for _, keyword := range keywords {
-		if strings.Contains(content, keyword) {
-			fmt.Printf("[+] %v find keyword: \"%v\"\n", filePath, keyword)
-			return
-		}
-	}
-}
-
-func run(rootPath string) {
-	files := getFileList(rootPath)
-	for _, filePath := range files {
-		if isDir(filePath) {
-			continue
-		} else {
-			if inExtens(filePath) {
-				search(filePath)
-			}
-		}
-	}
-}
+var options = &config.Options{}
 
 func main() {
+
+	app := cli.NewApp()
+	app.Name = "Akawaka"
+	app.Usage = "hello world"
+	app.Version = "0.0.1"
+	app.Flags = []cli.Flag{
+		&cli.StringFlag{Name: "extension", Aliases: []string{"e"}, Value: "txt", Destination: &options.Extens, Usage: "文件扩展名 eg:-e txt,jsp,asp"},
+		&cli.StringFlag{Name: "directory", Aliases: []string{"d"}, Value: utils.GetWd(), Destination: &options.DirPath, Usage: "搜索目录 eg: -d D:\\web"},
+		&cli.StringFlag{Name: "keyword", Aliases: []string{"k"}, Value: "", Destination: &options.Keyword, Usage: "搜索关键词 eg: -k keyword1,keyword2"},
+		&cli.StringFlag{Name: "keyword-file", Aliases: []string{"kf"}, Value: "", Destination: &options.Keywords_File, Usage: "搜索关键词文本 eg: -kf keywords.txt"},
+	}
+
+	app.Action = func(c *cli.Context) error {
+		utils.ShowBanner2()
+		/*
+			if len(options.Keyword) == 0 || len(options.Keywords_File) == 0 {
+				return errors.New("no keywords")
+			}
+
+		*/
+		if len(options.Keyword) != 0 {
+			if strings.Contains(options.Keyword, ",") {
+				options.SetKeywords()
+			} else {
+				options.Keywords = append(options.Keywords, options.Keyword)
+			}
+			if strings.Contains(options.Extens, ",") {
+				options.SetExtensions()
+			} else {
+				options.Extensions = append(options.Extensions, options.Extens)
+			}
+			err := runner.New(options)
+			return err
+		} else if len(options.Keywords_File) != 0 {
+			var err error
+			options.Keywords, err = utils.ReadArrFromTxt(options.Keywords_File)
+			if err != nil {
+				return err
+			}
+			if strings.Contains(options.Extens, ",") {
+				options.SetExtensions()
+			} else {
+				options.Extensions = append(options.Extensions, strings.TrimSpace(options.Extens))
+			}
+			fmt.Println(options.Keywords)
+			err = runner.New(options)
+			return err
+		}
+
+		return nil
+	}
+
 	utils.ShowBanner()
-	fmt.Printf("hello world!\n")
-	print(isDir("D:\\Tools\\框架漏洞\\综合扫描器\\afrog\\pocs\\v\\afrog.version"))
-	run("D:\\Tools\\框架漏洞\\综合扫描器\\afrog")
+	err := app.Run(os.Args)
+	if err != nil {
+		fmt.Println("start afrog failed, ", err.Error())
+	}
+
+	/*
+		utils.ShowBanner()
+		fmt.Printf("hello world!\n")
+		print(isDir("D:\\Tools\\框架漏洞\\综合扫描器\\afrog\\pocs\\v\\afrog.version"))
+		run("D:\\Tools\\框架漏洞\\综合扫描器\\afrog")
+
+	*/
+
 }
