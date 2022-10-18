@@ -1,49 +1,40 @@
 package utils
 
 import (
-	"bufio"
-	"fmt"
-	"io"
-	"os"
+	"akawaka/pkg/config"
+	"errors"
 	"strings"
 )
 
-func ShowBanner() {
-	fmt.Println("hello world")
-}
-
-func ShowBanner2() {
-	fmt.Println("hello world")
-}
-
-func GetWd() string {
-	dir, _ := os.Getwd()
-	return dir
-}
-
-func ReadArrFromTxt(fileName string) ([]string, error) {
-	var err error
-	var arr = []string{}
-
-	f, err := os.Open(fileName)
-	if err != nil {
-		return arr, err
+func Transform(options *config.Options) error {
+	if len(options.Keyword) != 0 {
+		if strings.Contains(options.Keyword, ",") {
+			options.SetKeywords()
+		} else {
+			options.Keywords = append(options.Keywords, options.Keyword)
+		}
+		if strings.Contains(options.Extens, ",") {
+			options.SetExtensions()
+			return nil
+		} else {
+			options.Extensions = append(options.Extensions, options.Extens)
+			return nil
+		}
+	} else if len(options.Keywords_File) != 0 {
+		var err error
+		options.Keywords, err = ReadArrFromTxt(options.Keywords_File)
+		if err != nil {
+			return err
+		}
+		if strings.Contains(options.Extens, ",") {
+			options.SetExtensions()
+			return nil
+		} else {
+			options.Extensions = append(options.Extensions, strings.TrimSpace(options.Extens))
+			return nil
+		}
+	} else {
+		return errors.New("keyword is required...")
 	}
 
-	defer f.Close()
-
-	r := bufio.NewReader(f)
-	for {
-		line, err := r.ReadString('\n')
-		if len(line) != 0 {
-			arr = append(arr, strings.TrimSpace(line))
-		}
-		if err == io.EOF {
-			break
-		} else if err != nil {
-			fmt.Printf("error reading file %s", err)
-			break
-		}
-	}
-	return arr, nil
 }
