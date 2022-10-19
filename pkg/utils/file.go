@@ -83,7 +83,7 @@ func InExtens(fileName string) bool {
 	return false
 }
 
-func readFile(fileName string) (string, error) {
+func ReadFile(fileName string) (string, error) {
 	b, err := os.ReadFile(fileName)
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
@@ -96,7 +96,7 @@ func readFile(fileName string) (string, error) {
 }
 
 func Search(filePath string) {
-	content, err := readFile(filePath)
+	content, err := ReadFile(filePath)
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
 		return

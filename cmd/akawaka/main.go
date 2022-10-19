@@ -12,6 +12,7 @@ import (
 var options = &config.Options{}
 
 func main() {
+	runner.ShowBanner()
 
 	app := cli.NewApp()
 	app.Name = "Akawaka"
@@ -25,7 +26,6 @@ func main() {
 	}
 
 	app.Action = func(c *cli.Context) error {
-		runner.ShowBanner()
 
 		err := utils.Transform(options)
 		if err != nil {
