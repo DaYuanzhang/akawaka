@@ -5,14 +5,6 @@ import (
 )
 
 func ShowBanner() {
-	/*
-		banner, err := utils.ReadFile("banner1.txt")
-		if err == nil {
-			fmt.Printf(banner)
-			return
-		}
-
-	*/
 	banner := "        __                                      __\n" +
 		"       /\\ \\                                    /\\ \\\n" +
 		"   __  \\ \\ \\/'\\      __     __  __  __     __  \\ \\ \\/'\\      __\n" +
