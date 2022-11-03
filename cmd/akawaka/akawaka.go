@@ -36,7 +36,6 @@ func main() {
 		return err
 	}
 
-	//runner.ShowBanner2()
 	err := app.Run(os.Args)
 	if err != nil {
 		fmt.Println("[!] start akawaka failed,", err.Error())
