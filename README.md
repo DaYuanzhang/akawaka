@@ -14,16 +14,16 @@
  \/__/\/_/ \/_/\/_/\/__/\/_/ \/__//__/   \/__/\/_/ \/_/\/_/\/__/\/_/
 
 Author: dean
-Version: 0.0.2
+Version: 0.0.3
 
 NAME:
-   Akawaka - 阿军的文件内容搜索小工具
+   Akawaka - 腚的文件内容搜索小工具
 
 USAGE:
    Akawaka [global options] command [command options] [arguments...]
 
 VERSION:
-   0.0.2
+   0.0.3
 
 COMMANDS:
    help, h  Shows a list of commands or help for one command
