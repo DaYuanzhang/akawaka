@@ -16,7 +16,7 @@ func main() {
 
 	app := cli.NewApp()
 	app.Name = "Akawaka"
-	app.Usage = "阿军的文件内容搜索小工具"
+	app.Usage = "腚的文件内容搜索小工具"
 	app.Version = runner.ShowVersion()
 	app.Flags = []cli.Flag{
 		&cli.StringFlag{Name: "extension", Aliases: []string{"e"}, Value: "txt", Destination: &options.Extens, Usage: "文件扩展名 eg:-e txt,jsp,asp"},

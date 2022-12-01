@@ -102,9 +102,8 @@ func Search(filePath string) {
 		return
 	}
 	for _, keyword := range keywords {
-		if strings.Contains(content, keyword) {
+		if strings.Contains(strings.ToLower(content), strings.ToLower(keyword)) {
 			fmt.Printf("[+] %v find keyword: \"%v\"\n", filePath, keyword)
-			return
 		}
 	}
 
