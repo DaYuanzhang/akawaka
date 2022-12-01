@@ -36,3 +36,5 @@ GLOBAL OPTIONS:
    --help, -h                        show help (default: false)
    --version, -v                     print the version (default: false)
    ```
+
+![image](https://user-images.githubusercontent.com/67625626/205003589-3dcc9e20-b6e6-4485-913b-0f06574ab926.png)
