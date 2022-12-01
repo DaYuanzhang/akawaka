@@ -78,6 +78,9 @@ func ReadArrFromTxt(fileName string) ([]string, error) {
 	return arr, nil
 }
 
+/*
+判断是否为目录
+*/
 func IsDir(filepath string) bool {
 	s, err := os.Stat(filepath)
 	if err != nil {
@@ -86,6 +89,9 @@ func IsDir(filepath string) bool {
 	return s.IsDir()
 }
 
+/*
+判断后缀名是否在指定范围
+*/
 func InExtens(fileName string) bool {
 	fileSuffix := path.Ext(fileName)
 	for _, e := range extens {
@@ -96,6 +102,9 @@ func InExtens(fileName string) bool {
 	return false
 }
 
+/*
+读取文件内容
+*/
 func ReadFile(fileName string) (string, error) {
 	b, err := os.ReadFile(fileName)
 	if err != nil {
@@ -108,6 +117,9 @@ func ReadFile(fileName string) (string, error) {
 	}
 }
 
+/*
+匹配内容关键字
+*/
 func Search(filePath string) {
 	content, err := ReadFile(filePath)
 	if err != nil {
@@ -122,11 +134,17 @@ func Search(filePath string) {
 
 }
 
+/*
+目录是否有效
+*/
 func IsValid(dirPath string) error {
 	_, err := os.Open(dirPath)
 	return err
 }
 
+/*
+初始化参数
+*/
 func Init(options *config.Options) {
 	keywords = options.Keywords
 	extens = options.Extensions
