@@ -3,6 +3,7 @@ package utils
 import (
 	"akawaka/pkg/config"
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -14,6 +15,9 @@ import (
 var extens = []string{}
 var keywords = []string{}
 
+/*
+遍历目录文件名字，返回字符串数组
+*/
 func GetFileList(rootPath string) ([]string, error) {
 
 	var files []string
@@ -33,20 +37,29 @@ func GetFileList(rootPath string) ([]string, error) {
 	return files, err
 }
 
+/*
+获取当前目录
+*/
 func GetWd() string {
 	dir, _ := os.Getwd()
 	return dir
 }
 
+/*
+从文本中读出keywords并转换成字符串数组，每行一个元素
+*/
 func ReadArrFromTxt(fileName string) ([]string, error) {
 	var err error
 	var arr = []string{}
+	fileSuffix := path.Ext(fileName)
+	if fileSuffix != "txt" {
+		return arr, errors.New("keywords file only supports txt")
+	}
 
 	f, err := os.Open(fileName)
 	if err != nil {
 		return arr, err
 	}
-
 	defer f.Close()
 
 	r := bufio.NewReader(f)

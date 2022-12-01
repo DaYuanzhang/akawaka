@@ -6,6 +6,9 @@ import (
 	"strings"
 )
 
+/*
+将keyword转换为keywords数组
+*/
 func KeywordTransform(options *config.Options) error {
 	// 判断关键词输入方式是文本还是多个字符串
 	if len(options.Keyword) != 0 {
@@ -28,6 +31,9 @@ func KeywordTransform(options *config.Options) error {
 	}
 }
 
+/*
+将extens转换成extensions数组
+*/
 func ExtensTransform(options *config.Options) error {
 	if len(options.Extens) != 0 {
 		if strings.Contains(options.Extens, ",") {
