@@ -9,4 +9,6 @@ type Options struct {
 	Extensions      []string
 	Extensions_File string
 	Is_Filename     bool
+	Count           int
+	CurrentCount    int
 }

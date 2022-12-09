@@ -21,6 +21,8 @@ func New(options *config.Options) error {
 	utils.Init(options)
 
 	files, _ := utils.GetFileList(options.DirPath)
+	options.Count = len(files)
+	options.CurrentCount = 0
 	fmt.Printf("[!] starting search...\n")
 	defer fmt.Printf("[!] search finished...\n")
 	for _, filePath := range files {
@@ -35,6 +37,8 @@ func New(options *config.Options) error {
 				}
 			}
 		}
+		options.CurrentCount++
+		fmt.Printf("\r%d/%d | %d%% ", options.CurrentCount, options.Count, options.CurrentCount*100/options.Count)
 	}
 	return nil
 }

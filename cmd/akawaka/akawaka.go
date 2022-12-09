@@ -29,8 +29,6 @@ func main() {
 
 	app.Action = func(c *cli.Context) error {
 
-		println(options.Is_Filename)
-
 		// 转换参数
 		err := utils.Transform(options)
 		if err != nil {
