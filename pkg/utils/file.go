@@ -9,6 +9,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -130,19 +131,43 @@ func Search(filePath string) {
 	var msg string
 	for _, keyword := range keywords {
 		if strings.Contains(strings.ToLower(content), strings.ToLower(keyword)) {
-			// msg = LogColor.GetColor("low", "[+] "+filePath+" find keyword: \""+keyword+"\":\n")
 			msg = "[+] " + filePath + " find keyword: \"" + keyword + "\":\n"
 			fmt.Printf(msg)
-			outputContext(strings.ToLower(content), strings.ToLower(keyword))
+			OutputContext(strings.ToLower(content), strings.ToLower(keyword))
 		}
 	}
 
 }
 
 /*
+搜索文件名关键字
+*/
+func SearchFilename(filePath string) {
+	var msg string
+	var filename string = ""
+	sysType := runtime.GOOS
+	if sysType == "linux" {
+		temp := strings.Split(filePath, "/")
+		filename = temp[len(temp)-1]
+	} else if sysType == "windows" {
+		temp := strings.Split(filePath, "\\\\")
+		filename = temp[len(temp)-1]
+	}
+
+	for _, keyword := range keywords {
+		if strings.Contains(strings.ToLower(filename), strings.ToLower(keyword)) {
+			lightName := OutputFilename(strings.ToLower(filename), strings.ToLower(keyword))
+			msg = "[+] " + strings.Trim(filePath, filename) + lightName + "\n"
+			fmt.Printf(msg)
+			OutputFilename(strings.ToLower(filename), strings.ToLower(keyword))
+		}
+	}
+}
+
+/*
 输出上下文, 并去除前后的换行符回车符
 */
-func outputContext(content string, keyword string) {
+func OutputContext(content string, keyword string) {
 	index := strings.Index(content, keyword)
 	const (
 		intel int = 10
@@ -176,8 +201,17 @@ func outputContext(content string, keyword string) {
 
 		println(content[s:index] + LogColor.GetColor("Green", keyword) + content[index+keyword_len:d])
 		next_content := content[index+keyword_len:]
-		outputContext(next_content, keyword)
+		OutputContext(next_content, keyword)
 	}
+}
+
+/*
+文件名匹配高亮输出
+*/
+func OutputFilename(filename string, keyword string) string {
+	index := strings.Index(filename, keyword)
+	msg := filename[:index] + LogColor.GetColor("Green", keyword) + filename[index+len(keyword):]
+	return msg
 }
 
 /*

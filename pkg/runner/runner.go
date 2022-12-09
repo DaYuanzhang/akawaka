@@ -22,15 +22,19 @@ func New(options *config.Options) error {
 
 	files, _ := utils.GetFileList(options.DirPath)
 	fmt.Printf("[!] starting search...\n")
+	defer fmt.Printf("[!] search finished...\n")
 	for _, filePath := range files {
 		if utils.IsDir(filePath) {
 			continue
 		} else {
 			if utils.InExtens(filePath) {
-				utils.Search(filePath)
+				if options.Is_Filename {
+					utils.SearchFilename(filePath)
+				} else {
+					utils.Search(filePath)
+				}
 			}
 		}
 	}
-	fmt.Printf("[!] search finished...\n")
 	return nil
 }

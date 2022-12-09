@@ -8,4 +8,5 @@ type Options struct {
 	Extension       string
 	Extensions      []string
 	Extensions_File string
+	Is_Filename     bool
 }

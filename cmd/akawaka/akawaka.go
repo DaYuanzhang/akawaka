@@ -24,9 +24,12 @@ func main() {
 		&cli.StringFlag{Name: "directory", Aliases: []string{"d"}, Value: utils.GetWd(), Destination: &options.DirPath, Usage: "搜索目录 eg: -d D:\\web"},
 		&cli.StringFlag{Name: "keyword", Aliases: []string{"k"}, Value: "", Destination: &options.Keyword, Usage: "搜索关键词 eg: -k keyword1,keyword2"},
 		&cli.StringFlag{Name: "keyword-file", Aliases: []string{"kf"}, Value: "", Destination: &options.Keywords_File, Usage: "搜索关键词文本 eg: -kf keywords.txt"},
+		&cli.BoolFlag{Name: "is-filename", Aliases: []string{"if"}, Value: false, Destination: &options.Is_Filename, Usage: "搜索文件名 eg: -if true"},
 	}
 
 	app.Action = func(c *cli.Context) error {
+
+		println(options.Is_Filename)
 
 		// 转换参数
 		err := utils.Transform(options)
@@ -41,7 +44,7 @@ func main() {
 
 	err := app.Run(os.Args)
 	if err != nil {
-		fmt.Println("[!] start akawaka failed,", err.Error())
+		fmt.Println(utils.LogColor.GetColor("Red", "[!] start akawaka failed,"+err.Error()))
 	}
 
 }
