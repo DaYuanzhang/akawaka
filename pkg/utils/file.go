@@ -52,8 +52,9 @@ func ReadArrFromTxt(fileName string) ([]string, error) {
 	var err error
 	var arr = []string{}
 	fileSuffix := path.Ext(fileName)
-	if fileSuffix != "txt" {
-		return arr, errors.New("keywords file only supports txt")
+	println("fileSuffix: ", fileSuffix, "\n")
+	if fileSuffix != ".txt" {
+		return arr, errors.New("file only supports txt")
 	}
 
 	f, err := os.Open(fileName)
@@ -126,12 +127,57 @@ func Search(filePath string) {
 		fmt.Printf("err: %v\n", err)
 		return
 	}
+	var msg string
 	for _, keyword := range keywords {
 		if strings.Contains(strings.ToLower(content), strings.ToLower(keyword)) {
-			fmt.Printf("[+] %v find keyword: \"%v\"\n", filePath, keyword)
+			// msg = LogColor.GetColor("low", "[+] "+filePath+" find keyword: \""+keyword+"\":\n")
+			msg = "[+] " + filePath + " find keyword: \"" + keyword + "\":\n"
+			fmt.Printf(msg)
+			outputContext(strings.ToLower(content), strings.ToLower(keyword))
 		}
 	}
 
+}
+
+/*
+输出上下文, 并去除前后的换行符回车符
+*/
+func outputContext(content string, keyword string) {
+	index := strings.Index(content, keyword)
+	const (
+		intel int = 10
+		blank     = "\r\n"
+	)
+
+	content_len := len(content)
+	keyword_len := len(keyword)
+
+	if index != -1 {
+		s := 0
+		d := 0
+		if index >= intel {
+			s = index - intel
+		} else {
+			s = 0
+		}
+		if (content_len - index - keyword_len) >= intel {
+			d = index + keyword_len + intel
+		} else {
+			d = content_len
+		}
+
+		if strings.Contains(content[s:index], blank) {
+			s = s + strings.LastIndex(content[s:index], blank) + len(blank)
+		}
+
+		if strings.Contains(content[index+keyword_len:d], blank) {
+			d = index + keyword_len + strings.Index(content[index+keyword_len:d], blank)
+		}
+
+		println(content[s:index] + LogColor.GetColor("Green", keyword) + content[index+keyword_len:d])
+		next_content := content[index+keyword_len:]
+		outputContext(next_content, keyword)
+	}
 }
 
 /*
