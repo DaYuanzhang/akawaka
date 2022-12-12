@@ -36,7 +36,7 @@ func KeywordTransform(options *config.Options) error {
 		}
 	} else if len(options.Keywords_File) != 0 {
 		var err error
-		options.Keywords, err = ReadArrFromTxt(options.Keywords_File)
+		options.Keywords, err = ReadArrFromTxt(options.Keywords_File, "Keyword")
 		if err != nil {
 			return err
 		}
@@ -60,7 +60,7 @@ func ExtensionTransform(options *config.Options) error {
 		}
 	} else if len(options.Extensions_File) != 0 {
 		var err error
-		options.Extensions, err = ReadArrFromTxt(options.Extensions_File)
+		options.Extensions, err = ReadArrFromTxt(options.Extensions_File, "Extension")
 		if err != nil {
 			return err
 		}

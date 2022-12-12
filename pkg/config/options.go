@@ -11,4 +11,6 @@ type Options struct {
 	Is_Filename     bool
 	Count           int
 	CurrentCount    int
+	Thread          int
+	Verbose         bool
 }

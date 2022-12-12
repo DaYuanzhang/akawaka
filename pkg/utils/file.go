@@ -22,6 +22,7 @@ var keywords = []string{}
 func GetFileList(rootPath string) ([]string, error) {
 
 	var files []string
+	var inExtens_files = []string{}
 	err := filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
 		files = append(files, path)
 		return nil
@@ -29,13 +30,13 @@ func GetFileList(rootPath string) ([]string, error) {
 	if err != nil {
 		return []string{}, err
 	}
-	/*
-		for _, file := range files {
-			fmt.Println(file)
-		}
 
-	*/
-	return files, err
+	for _, v := range files {
+		if InExtens(v) {
+			inExtens_files = append(inExtens_files, v)
+		}
+	}
+	return inExtens_files, err
 }
 
 /*
@@ -49,11 +50,11 @@ func GetWd() string {
 /*
 从文本中读出keywords并转换成字符串数组，每行一个元素
 */
-func ReadArrFromTxt(fileName string) ([]string, error) {
+func ReadArrFromTxt(fileName string, msg string) ([]string, error) {
 	var err error
 	var arr = []string{}
 	fileSuffix := path.Ext(fileName)
-	println("fileSuffix: ", fileSuffix, "\n")
+	fmt.Printf("%s file: %s\n\n", msg, fileName)
 	if fileSuffix != ".txt" {
 		return arr, errors.New("file only supports txt")
 	}
@@ -114,7 +115,6 @@ func ReadFile(fileName string) (string, error) {
 		return "", err
 	} else {
 		content := string(b[:])
-		//fmt.Printf("b: %v\n", content)
 		return content, nil
 	}
 }
@@ -122,7 +122,7 @@ func ReadFile(fileName string) (string, error) {
 /*
 匹配内容关键字
 */
-func Search(filePath string) {
+func Search(filePath string, verbose bool) {
 	content, err := ReadFile(filePath)
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
@@ -131,9 +131,11 @@ func Search(filePath string) {
 	var msg string
 	for _, keyword := range keywords {
 		if strings.Contains(strings.ToLower(content), strings.ToLower(keyword)) {
-			msg = "[+] " + filePath + " find keyword: \"" + keyword + "\":\n"
+			msg = "\r[+] " + filePath + " find keyword: \"" + keyword + "\":\r\n"
 			fmt.Printf(msg)
-			OutputContext(strings.ToLower(content), strings.ToLower(keyword))
+			if verbose {
+				OutputContext(strings.ToLower(content), strings.ToLower(keyword))
+			}
 		}
 	}
 
@@ -150,14 +152,19 @@ func SearchFilename(filePath string) {
 		temp := strings.Split(filePath, "/")
 		filename = temp[len(temp)-1]
 	} else if sysType == "windows" {
-		temp := strings.Split(filePath, "\\\\")
-		filename = temp[len(temp)-1]
+		if strings.Contains(filePath, "\\\\") {
+			temp := strings.Split(filePath, "\\\\")
+			filename = temp[len(temp)-1]
+		} else {
+			temp := strings.Split(filePath, "\\")
+			filename = temp[len(temp)-1]
+		}
 	}
 
 	for _, keyword := range keywords {
 		if strings.Contains(strings.ToLower(filename), strings.ToLower(keyword)) {
 			lightName := OutputFilename(strings.ToLower(filename), strings.ToLower(keyword))
-			msg = "[+] " + strings.Trim(filePath, filename) + lightName + "\n"
+			msg = "\r[+] " + strings.Trim(filePath, filename) + lightName + "\r\n"
 			fmt.Printf(msg)
 			OutputFilename(strings.ToLower(filename), strings.ToLower(keyword))
 		}
@@ -199,7 +206,9 @@ func OutputContext(content string, keyword string) {
 			d = index + keyword_len + strings.Index(content[index+keyword_len:d], blank)
 		}
 
-		println(content[s:index] + LogColor.GetColor("Green", keyword) + content[index+keyword_len:d])
+		msg := content[s:index] + LogColor.GetColor("Green", keyword) + content[index+keyword_len:d]
+		fmt.Printf("\r%s\r\n", msg)
+		//(content[s:index] + LogColor.GetColor("Green", keyword) + content[index+keyword_len:d])
 		next_content := content[index+keyword_len:]
 		OutputContext(next_content, keyword)
 	}
