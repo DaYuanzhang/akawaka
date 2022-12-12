@@ -54,7 +54,7 @@ func ReadArrFromTxt(fileName string, msg string) ([]string, error) {
 	var err error
 	var arr = []string{}
 	fileSuffix := path.Ext(fileName)
-	fmt.Printf("%s file: %s\n\n", msg, fileName)
+	fmt.Printf("%s file: %s\n", msg, fileName)
 	if fileSuffix != ".txt" {
 		return arr, errors.New("file only supports txt")
 	}

@@ -34,8 +34,8 @@ func New(options *config.Options) error {
 	files, _ := utils.GetFileList(options.DirPath)
 	options.Count = len(files)
 	options.CurrentCount = 0
-	fmt.Printf("[!] starting search...\n")
-	defer fmt.Printf("\n[!] search finished...\r\n")
+	fmt.Printf("\n[!] starting search...\n")
+	defer fmt.Printf("[!] search finished...\r\n")
 
 	err = excute(options, files)
 	return nil

@@ -60,6 +60,7 @@ func ExtensionTransform(options *config.Options) error {
 		}
 	} else if len(options.Extensions_File) != 0 {
 		var err error
+
 		options.Extensions, err = ReadArrFromTxt(options.Extensions_File, "Extension")
 		if err != nil {
 			return err
@@ -86,6 +87,5 @@ func Transform(options *config.Options) error {
 	if err2 != nil {
 		return err2
 	}
-
 	return nil
 }
