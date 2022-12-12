@@ -25,7 +25,7 @@ func main() {
 		&cli.StringFlag{Name: "keyword", Aliases: []string{"k"}, Value: "", Destination: &options.Keyword, Usage: "搜索关键词 eg: -k keyword1,keyword2"},
 		&cli.StringFlag{Name: "keyword-file", Aliases: []string{"kf"}, Value: "", Destination: &options.Keywords_File, Usage: "搜索关键词文本 eg: -kf keywords.txt"},
 		&cli.BoolFlag{Name: "is-filename", Aliases: []string{"if"}, Value: false, Destination: &options.Is_Filename, Usage: "搜索文件名 eg: -if true"},
-		&cli.BoolFlag{Name: "verbose", Aliases: []string{"m"}, Value: false, Destination: &options.Verbose, Usage: "详细输出 eg: -v true"},
+		&cli.BoolFlag{Name: "more", Aliases: []string{"m"}, Value: false, Destination: &options.Verbose, Usage: "详细输出 eg: -m true"},
 		&cli.IntFlag{Name: "Thread", Aliases: []string{"t"}, Value: 10, Destination: &options.Thread, Usage: "线程 eg: -t 10"},
 	}
 
