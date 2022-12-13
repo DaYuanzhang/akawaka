@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"sync"
 )
 
 var extens = []string{}
@@ -20,11 +21,16 @@ var keywords = []string{}
 遍历目录文件名字，返回字符串数组
 */
 func GetFileList(rootPath string) ([]string, error) {
-
+	var lock sync.Mutex
+	var count int = 0
 	var files []string
 	var inExtens_files = []string{}
 	err := filepath.Walk(rootPath, func(path string, info os.FileInfo, err error) error {
 		files = append(files, path)
+		lock.Lock()
+		count++
+		fmt.Printf("\r遍历文件：%v", count)
+		lock.Unlock()
 		return nil
 	})
 	if err != nil {
@@ -36,6 +42,7 @@ func GetFileList(rootPath string) ([]string, error) {
 			inExtens_files = append(inExtens_files, v)
 		}
 	}
+	fmt.Printf("\n共找到指定扩展名文件：%v\n", len(inExtens_files))
 	return inExtens_files, err
 }
 

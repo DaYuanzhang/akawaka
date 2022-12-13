@@ -35,7 +35,7 @@ func New(options *config.Options) error {
 	options.Count = len(files)
 	options.CurrentCount = 0
 	fmt.Printf("\n[!] starting search...\n")
-	defer fmt.Printf("[!] search finished...\r\n")
+	defer fmt.Printf("\r\n[!] search finished...\r\n")
 
 	err = excute(options, files)
 	return nil
@@ -88,7 +88,7 @@ func outputProcess(options *config.Options) {
 	options.CurrentCount++
 	fmt.Printf("\r%d/%d | %d%% ", options.CurrentCount, options.Count, options.CurrentCount*100/options.Count)
 	lock.Unlock()
-	RandSleep(10)
+	RandSleep(1)
 }
 
 func RandSleep(millisencond int) {
