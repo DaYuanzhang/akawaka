@@ -42,7 +42,7 @@ func GetFileList(rootPath string) ([]string, error) {
 			inExtens_files = append(inExtens_files, v)
 		}
 	}
-	fmt.Printf("\n共找到指定扩展名文件：%v\n", len(inExtens_files))
+	fmt.Printf("\n共找到指定扩展名文件数：%v\n", len(inExtens_files))
 	return inExtens_files, err
 }
 
